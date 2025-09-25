@@ -80,9 +80,24 @@ class AttributedStringConverter {
     public func convert(_ elements: [MarkdownElement]) -> NSAttributedString {
         let result = NSMutableAttributedString()
 
-        for element in elements {
+        for (index, element) in elements.enumerated() {
             let attributedString = createAttributedString(for: element)
             result.append(attributedString)
+            
+            // Добавляем перенос строки после параграфа, если следующий элемент не является inline
+            if case .paragraph = element.type {
+                let nextElement = index + 1 < elements.count ? elements[index + 1] : nil
+                if nextElement == nil {
+                    result.append(NSAttributedString(string: "\n"))
+                } else {
+                    switch nextElement!.type {
+                    case .header, .paragraph, .unorderedList, .orderedList:
+                        result.append(NSAttributedString(string: "\n"))
+                    default:
+                        break
+                    }
+                }
+            }
         }
 
         return result
@@ -116,6 +131,11 @@ class AttributedStringConverter {
             case 6: attributes = fontAttributes(for: configuration.h6)
             default: attributes = fontAttributes(for: configuration.h1)
             }
+            // Добавляем перенос строки после заголовка
+            let result = NSMutableAttributedString()
+            result.append(NSAttributedString(string: content, attributes: attributes))
+            result.append(NSAttributedString(string: "\n"))
+            return result
 
         case .bold:
             attributes = fontAttributes(for: configuration.bold)
@@ -181,7 +201,9 @@ class AttributedStringConverter {
             return NSAttributedString(string: "\n")
 
         case .paragraph:
-            attributes = fontAttributes(for: configuration.text)
+            // Параграф теперь обрабатывается как контейнер для inline элементов
+            // Возвращаем пустую строку, так как inline элементы обрабатываются отдельно
+            return NSAttributedString(string: "")
 
         case .table:
             // Таблицы пока не реализованы - возвращаем как обычный текст

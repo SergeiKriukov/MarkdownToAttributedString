@@ -45,7 +45,12 @@ public class MarkdownParser {
 
             // Парсим обычный текст с inline элементами
             let inlineElements = parseInlineElements(trimmedLine)
-            elements.append(contentsOf: inlineElements)
+            if !inlineElements.isEmpty {
+                // Создаем параграф с inline элементами
+                let paragraph = MarkdownElement(type: .paragraph, content: "")
+                elements.append(paragraph)
+                elements.append(contentsOf: inlineElements)
+            }
         }
 
         return elements
