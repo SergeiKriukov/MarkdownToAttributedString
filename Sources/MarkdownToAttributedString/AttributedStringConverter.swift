@@ -155,6 +155,9 @@ class AttributedStringConverter {
             for element in inlineElements {
                 result.append(createAttributedString(for: element))
             }
+            
+            // Добавляем перенос строки после элемента списка
+            result.append(NSAttributedString(string: "\n"))
             return result
 
         case .orderedList(let number, let inlineElements):
@@ -169,6 +172,9 @@ class AttributedStringConverter {
             for element in inlineElements {
                 result.append(createAttributedString(for: element))
             }
+            
+            // Добавляем перенос строки после элемента списка
+            result.append(NSAttributedString(string: "\n"))
             return result
 
         case .lineBreak:
