@@ -84,7 +84,7 @@ public struct MarkdownConfiguration {
         code: MarkdownStyle = .init(),
         codeBlock: MarkdownStyle = .init(),
         link: MarkdownStyle = .init(),
-        listPrefix: MarkdownStyle = .init()
+        listPrefix: MarkdownStyle = .init(fontWeight: .semibold)
     ) {
         self.text = text
         self.h1 = h1
