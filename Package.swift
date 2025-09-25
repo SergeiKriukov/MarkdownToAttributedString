@@ -22,12 +22,17 @@ let package = Package(
     targets: [
         .target(
             name: "MarkdownToAttributedString",
-            dependencies: []),
+            dependencies: [],
+            path: "Sources/MarkdownToAttributedString",
+            resources: []),
         .executableTarget(
             name: "MarkdownExample",
-            dependencies: ["MarkdownToAttributedString"]),
+            dependencies: ["MarkdownToAttributedString"],
+            path: "Sources/MarkdownExample"),
         .testTarget(
             name: "MarkdownToAttributedStringTests",
-            dependencies: ["MarkdownToAttributedString"]),
-    ]
+            dependencies: ["MarkdownToAttributedString"],
+            path: "Tests/MarkdownToAttributedStringTests"),
+    ],
+    swiftLanguageVersions: [.v5]
 )

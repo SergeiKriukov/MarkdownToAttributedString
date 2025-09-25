@@ -150,6 +150,8 @@ class AttributedStringConverter {
             attributes = fontAttributes(for: configuration.codeBlock)
 
         case .link(let title, let url):
+            _ = title // Используем title для отображения
+            _ = url   // URL можно использовать для ссылок
             attributes = fontAttributes(for: configuration.link)
             // Для ссылок можно добавить underline
             #if canImport(UIKit)
@@ -159,6 +161,7 @@ class AttributedStringConverter {
             #endif
 
         case .image(let title, let url):
+            _ = url // URL можно использовать для загрузки изображения
             // Для изображений возвращаем просто текст с описанием
             attributes = fontAttributes(for: configuration.text)
             return NSAttributedString(string: "🖼️ \(title)", attributes: attributes)
