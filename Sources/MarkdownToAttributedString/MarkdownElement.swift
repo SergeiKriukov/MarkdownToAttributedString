@@ -1,7 +1,7 @@
 import Foundation
 
 /// Перечисление типов Markdown элементов
-public enum MarkdownElementType: Equatable {
+public enum MarkdownElementType {
     case text
     case header(level: Int)
     case bold
@@ -10,15 +10,15 @@ public enum MarkdownElementType: Equatable {
     case codeBlock
     case link(title: String, url: String)
     case image(title: String, url: String)
-    case unorderedList
-    case orderedList(number: Int)
+    case unorderedList(content: [MarkdownElement])
+    case orderedList(number: Int, content: [MarkdownElement])
     case lineBreak
     case paragraph
     case table(headers: [String], rows: [[String]])
 }
 
 /// Модель Markdown элемента
-public struct MarkdownElement {
+public struct MarkdownElement: Equatable {
     public let type: MarkdownElementType
     public let content: String
     public let range: Range<String.Index>?
@@ -27,6 +27,46 @@ public struct MarkdownElement {
         self.type = type
         self.content = content
         self.range = range
+    }
+
+    public static func == (lhs: MarkdownElement, rhs: MarkdownElement) -> Bool {
+        // Для простоты сравниваем только type и content, игнорируя range
+        return lhs.type == rhs.type && lhs.content == rhs.content
+    }
+}
+
+extension MarkdownElementType: Equatable {
+    public static func == (lhs: MarkdownElementType, rhs: MarkdownElementType) -> Bool {
+        switch (lhs, rhs) {
+        case (.text, .text):
+            return true
+        case (.header(let l), .header(let r)):
+            return l == r
+        case (.bold, .bold):
+            return true
+        case (.italic, .italic):
+            return true
+        case (.code, .code):
+            return true
+        case (.codeBlock, .codeBlock):
+            return true
+        case (.link(let lt, let lu), .link(let rt, let ru)):
+            return lt == rt && lu == ru
+        case (.image(let lt, let lu), .image(let rt, let ru)):
+            return lt == rt && lu == ru
+        case (.unorderedList(let lc), .unorderedList(let rc)):
+            return lc == rc
+        case (.orderedList(let ln, let lc), .orderedList(let rn, let rc)):
+            return ln == rn && lc == rc
+        case (.lineBreak, .lineBreak):
+            return true
+        case (.paragraph, .paragraph):
+            return true
+        case (.table(let lh, let lr), .table(let rh, let rr)):
+            return lh == rh && lr == rr
+        default:
+            return false
+        }
     }
 }
 

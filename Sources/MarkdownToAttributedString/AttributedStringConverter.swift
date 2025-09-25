@@ -143,26 +143,32 @@ class AttributedStringConverter {
             attributes = fontAttributes(for: configuration.text)
             return NSAttributedString(string: "🖼️ \(title)", attributes: attributes)
 
-        case .unorderedList:
+        case .unorderedList(let inlineElements):
             // Создаем attributed string с префиксом и контентом
             let prefix = "• "
             let prefixAttributes = fontAttributes(for: configuration.listPrefix)
-            let contentAttributes = fontAttributes(for: configuration.text)
 
             let result = NSMutableAttributedString()
             result.append(NSAttributedString(string: prefix, attributes: prefixAttributes))
-            result.append(NSAttributedString(string: content, attributes: contentAttributes))
+
+            // Добавляем inline элементы контента
+            for element in inlineElements {
+                result.append(createAttributedString(for: element))
+            }
             return result
 
-        case .orderedList(let number):
+        case .orderedList(let number, let inlineElements):
             // Создаем attributed string с префиксом и контентом
             let prefix = "\(number). "
             let prefixAttributes = fontAttributes(for: configuration.listPrefix)
-            let contentAttributes = fontAttributes(for: configuration.text)
 
             let result = NSMutableAttributedString()
             result.append(NSAttributedString(string: prefix, attributes: prefixAttributes))
-            result.append(NSAttributedString(string: content, attributes: contentAttributes))
+
+            // Добавляем inline элементы контента
+            for element in inlineElements {
+                result.append(createAttributedString(for: element))
+            }
             return result
 
         case .lineBreak:

@@ -69,7 +69,8 @@ public class MarkdownParser {
         guard line.hasPrefix("- ") || line.hasPrefix("* ") || line.hasPrefix("+ ") else { return nil }
 
         let content = String(line.dropFirst(2))
-        return MarkdownElement(type: .unorderedList, content: content)
+        let inlineElements = parseInlineElements(content)
+        return MarkdownElement(type: .unorderedList(content: inlineElements), content: "")
     }
 
     private func parseOrderedList(_ line: String, currentNumber: inout Int) -> MarkdownElement? {
@@ -86,8 +87,9 @@ public class MarkdownParser {
 
         currentNumber = number
         let content = String(line[contentRange])
+        let inlineElements = parseInlineElements(content)
 
-        return MarkdownElement(type: .orderedList(number: number), content: content)
+        return MarkdownElement(type: .orderedList(number: number, content: inlineElements), content: "")
     }
 
     private func parseCodeBlock(_ line: String) -> MarkdownElement? {
