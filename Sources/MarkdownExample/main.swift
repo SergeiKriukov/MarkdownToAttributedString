@@ -1,3 +1,4 @@
+import Foundation
 import MarkdownToAttributedString
 
 print("🚀 MarkdownToAttributedString - Демонстрация работы")
@@ -110,6 +111,39 @@ let extendedResult = simpleMarkdown.toAttributedString()
 
 print("✅ Расширение работает!")
 print("📊 Длина результата: \(extendedResult.length) символов")
+
+// Проверяем применение стилей
+print("\n" + String(repeating: "=", count: 60))
+print("🎨 Проверка применения стилей:")
+
+let simpleTest = "# Тест\n**Жирный** и *курсив* текст"
+let testResult = converter.convert(simpleTest)
+
+print("📝 Тестовый текст: \"\(simpleTest)\"")
+print("📊 Длина результата: \(testResult.length)")
+
+if testResult.length > 0 {
+    // Проверяем атрибуты заголовка
+    let headerAttrs = testResult.attributes(at: 0, effectiveRange: nil)
+    print("🎯 Атрибуты заголовка: \(headerAttrs.count > 0 ? "присутствуют" : "отсутствуют")")
+
+    // Проверяем атрибуты жирного текста
+    if let boldRange = testResult.string.range(of: "Жирный") {
+        let nsRange = NSRange(boldRange, in: testResult.string)
+        let boldAttrs = testResult.attributes(at: nsRange.location, effectiveRange: nil)
+        print("💪 Атрибуты жирного текста: \(boldAttrs.count > 0 ? "присутствуют" : "отсутствуют")")
+    }
+
+    // Проверяем атрибуты курсива
+    if let italicRange = testResult.string.range(of: "курсив") {
+        let nsRange = NSRange(italicRange, in: testResult.string)
+        let italicAttrs = testResult.attributes(at: nsRange.location, effectiveRange: nil)
+        print("🎭 Атрибуты курсива: \(italicAttrs.count > 0 ? "присутствуют" : "отсутствуют")")
+    }
+
+    // Показываем первые несколько атрибутов
+    print("📋 Ключи атрибутов: \(Array(headerAttrs.keys))")
+}
 
 print("\n" + String(repeating: "=", count: 60))
 print("🎉 Демонстрация завершена успешно!")
