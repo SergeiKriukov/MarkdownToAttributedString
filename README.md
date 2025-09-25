@@ -6,6 +6,9 @@
 
 A powerful Swift library for converting Markdown text to `NSAttributedString` with full formatting support. Perfect for iOS, macOS, tvOS, and watchOS applications that need to display rich text from Markdown sources.
 
+<img width="826" height="804" alt="image" src="https://github.com/user-attachments/assets/ea839987-82b4-443c-a431-fbf7117e235f" />
+
+
 ## ✨ Features
 
 - 🎯 **Complete Markdown Support** - Headers, bold, italic, code, lists, links, images
