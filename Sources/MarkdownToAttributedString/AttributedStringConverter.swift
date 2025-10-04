@@ -84,16 +84,19 @@ class AttributedStringConverter {
             let attributedString = createAttributedString(for: element)
             result.append(attributedString)
             
-            // Добавляем перенос строки после параграфа и blockquote, если следующий элемент не является inline
+        // Добавляем перенос строки после параграфа, blockquote и жирного текста, если следующий элемент не является inline
             let shouldAddNewline: Bool
             switch element.type {
             case .paragraph:
                 shouldAddNewline = true
             case .blockquote:
                 shouldAddNewline = true
+            case .bold:
+                shouldAddNewline = true
             default:
                 shouldAddNewline = false
             }
+
 
             if shouldAddNewline {
                 let nextElement = index + 1 < elements.count ? elements[index + 1] : nil
