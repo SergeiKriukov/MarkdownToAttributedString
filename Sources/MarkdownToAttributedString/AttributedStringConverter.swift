@@ -84,14 +84,24 @@ class AttributedStringConverter {
             let attributedString = createAttributedString(for: element)
             result.append(attributedString)
             
-            // Добавляем перенос строки после параграфа, если следующий элемент не является inline
-            if case .paragraph = element.type {
+            // Добавляем перенос строки после параграфа и blockquote, если следующий элемент не является inline
+            let shouldAddNewline: Bool
+            switch element.type {
+            case .paragraph:
+                shouldAddNewline = true
+            case .blockquote:
+                shouldAddNewline = true
+            default:
+                shouldAddNewline = false
+            }
+
+            if shouldAddNewline {
                 let nextElement = index + 1 < elements.count ? elements[index + 1] : nil
                 if nextElement == nil {
                     result.append(NSAttributedString(string: "\n"))
                 } else {
                     switch nextElement!.type {
-                    case .header, .paragraph, .unorderedList, .orderedList:
+                    case .header, .paragraph, .unorderedList, .orderedList, .blockquote:
                         result.append(NSAttributedString(string: "\n"))
                     default:
                         break
@@ -142,6 +152,15 @@ class AttributedStringConverter {
 
         case .italic:
             attributes = fontAttributes(for: configuration.italic)
+
+        case .strikethrough:
+            attributes = fontAttributes(for: configuration.strikethrough)
+            // Добавляем strikethrough стиль
+            #if canImport(UIKit)
+                attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+            #elseif canImport(AppKit)
+                attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+            #endif
 
         case .code:
             attributes = fontAttributes(for: configuration.code)
@@ -207,6 +226,23 @@ class AttributedStringConverter {
             // Параграф теперь обрабатывается как контейнер для inline элементов
             // Возвращаем пустую строку, так как inline элементы обрабатываются отдельно
             return NSAttributedString(string: "")
+
+        case .blockquote(let inlineElements):
+            // Создаем attributed string с префиксом и контентом
+            let prefix = "▎ "
+            let prefixAttributes = fontAttributes(for: configuration.blockquote)
+
+            let result = NSMutableAttributedString()
+            result.append(NSAttributedString(string: prefix, attributes: prefixAttributes))
+
+            // Добавляем inline элементы контента
+            for element in inlineElements {
+                result.append(createAttributedString(for: element))
+            }
+
+            // Добавляем перенос строки после blockquote
+            result.append(NSAttributedString(string: "\n"))
+            return result
 
         case .table:
             // Таблицы пока не реализованы - возвращаем как обычный текст

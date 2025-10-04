@@ -6,6 +6,7 @@ public enum MarkdownElementType {
     case header(level: Int)
     case bold
     case italic
+    case strikethrough
     case code
     case codeBlock
     case link(title: String, url: String)
@@ -14,6 +15,7 @@ public enum MarkdownElementType {
     case orderedList(number: Int, content: [MarkdownElement])
     case lineBreak
     case paragraph
+    case blockquote(content: [MarkdownElement])
     case table(headers: [String], rows: [[String]])
 }
 
@@ -46,6 +48,8 @@ extension MarkdownElementType: Equatable {
             return true
         case (.italic, .italic):
             return true
+        case (.strikethrough, .strikethrough):
+            return true
         case (.code, .code):
             return true
         case (.codeBlock, .codeBlock):
@@ -62,6 +66,8 @@ extension MarkdownElementType: Equatable {
             return true
         case (.paragraph, .paragraph):
             return true
+        case (.blockquote(let lc), .blockquote(let rc)):
+            return lc == rc
         case (.table(let lh, let lr), .table(let rh, let rr)):
             return lh == rh && lr == rr
         default:
@@ -106,10 +112,12 @@ public struct MarkdownConfiguration {
     public let h6: MarkdownStyle
     public let bold: MarkdownStyle
     public let italic: MarkdownStyle
+    public let strikethrough: MarkdownStyle
     public let code: MarkdownStyle
     public let codeBlock: MarkdownStyle
     public let link: MarkdownStyle
     public let listPrefix: MarkdownStyle
+    public let blockquote: MarkdownStyle
 
     public init(
         text: MarkdownStyle = .init(),
@@ -121,10 +129,12 @@ public struct MarkdownConfiguration {
         h6: MarkdownStyle = .init(fontSize: 10, fontWeight: .bold),
         bold: MarkdownStyle = .init(fontWeight: .bold),
         italic: MarkdownStyle = .init(isItalic: true),
+        strikethrough: MarkdownStyle = .init(),
         code: MarkdownStyle = .init(),
         codeBlock: MarkdownStyle = .init(),
         link: MarkdownStyle = .init(),
-        listPrefix: MarkdownStyle = .init(fontWeight: .semibold)
+        listPrefix: MarkdownStyle = .init(fontWeight: .semibold),
+        blockquote: MarkdownStyle = .init()
     ) {
         self.text = text
         self.h1 = h1
@@ -135,9 +145,11 @@ public struct MarkdownConfiguration {
         self.h6 = h6
         self.bold = bold
         self.italic = italic
+        self.strikethrough = strikethrough
         self.code = code
         self.codeBlock = codeBlock
         self.link = link
         self.listPrefix = listPrefix
+        self.blockquote = blockquote
     }
 }

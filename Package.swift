@@ -18,6 +18,9 @@ let package = Package(
         .executable(
             name: "MarkdownExample",
             targets: ["MarkdownExample"]),
+        .executable(
+            name: "TestNewFeatures",
+            targets: ["TestNewFeatures"]),
     ],
     targets: [
         .target(
@@ -29,6 +32,10 @@ let package = Package(
             name: "MarkdownExample",
             dependencies: ["MarkdownToAttributedString"],
             path: "Sources/MarkdownExample"),
+        .executableTarget(
+            name: "TestNewFeatures",
+            dependencies: ["MarkdownToAttributedString"],
+            path: "Sources/TestNewFeatures"),
         .testTarget(
             name: "MarkdownToAttributedStringTests",
             dependencies: ["MarkdownToAttributedString"],

@@ -11,7 +11,7 @@ A powerful Swift library for converting Markdown text to `NSAttributedString` wi
 
 ## ✨ Features
 
-- 🎯 **Complete Markdown Support** - Headers, bold, italic, code, lists, links, images
+- 🎯 **Complete Markdown Support** - Headers, bold, italic, strikethrough, code, lists, links, images, blockquotes
 - 🎨 **Customizable Styling** - Configure fonts, sizes, colors, and weights for each element
 - 📱 **Cross-Platform** - Works on iOS, macOS, tvOS, and watchOS
 - 🚀 **High Performance** - Optimized parsing and conversion
@@ -40,11 +40,14 @@ let markdown = """
 # Welcome to MarkdownToAttributedString
 
 This is **bold** and *italic* text with `inline code`.
+You can also use ~~strikethrough~~ formatting.
 
 ## Features
 - Easy to use
 - Highly customizable
 - Cross-platform support
+
+> This is a blockquote with **bold** text inside.
 """
 
 // Convert with default styling
@@ -68,14 +71,16 @@ let config = MarkdownConfiguration(
     h1: .init(fontSize: 24, fontWeight: .bold),
     h2: .init(fontSize: 20, fontWeight: .semibold),
     h3: .init(fontSize: 18, fontWeight: .medium),
-    
+
     // Text formatting
     bold: .init(fontWeight: .bold),
     italic: .init(isItalic: true),
+    strikethrough: .init(),
     code: .init(fontSize: 14, fontWeight: .regular),
-    
-    // List styling
-    listPrefix: .init(fontWeight: .semibold)
+
+    // List and blockquote styling
+    listPrefix: .init(fontWeight: .semibold),
+    blockquote: .init()
 )
 
 let attributedString = markdown.toAttributedString(configuration: config)
@@ -95,11 +100,13 @@ let attributedString = markdown.toAttributedString(configuration: config)
 | Headers | `# H1`, `## H2`, `### H3` | ✅ |
 | Bold | `**bold text**` | ✅ |
 | Italic | `*italic text*` | ✅ |
+| Strikethrough | `~~strikethrough~~` | ✅ |
 | Inline Code | `` `code` `` | ✅ |
 | Code Blocks | ```` ```code``` ```` | ✅ |
 | Links | `[text](url)` | ✅ |
 | Images | `![alt](url)` | ✅ |
 | Lists | `- item`, `1. item` | ✅ |
+| Blockquotes | `> quote text` | ✅ |
 | Line Breaks | `\n` | ✅ |
 
 ## 🔧 Advanced Usage

@@ -69,11 +69,13 @@ public struct MarkdownConfiguration {
     public let h6: MarkdownStyle
     public let bold: MarkdownStyle
     public let italic: MarkdownStyle
+    public let strikethrough: MarkdownStyle
     public let code: MarkdownStyle
     public let codeBlock: MarkdownStyle
     public let link: MarkdownStyle
     public let listPrefix: MarkdownStyle
-    
+    public let blockquote: MarkdownStyle
+
     public init(
         text: MarkdownStyle = .init(),
         h1: MarkdownStyle = .init(fontSize: 24, fontWeight: .bold),
@@ -84,10 +86,12 @@ public struct MarkdownConfiguration {
         h6: MarkdownStyle = .init(fontSize: 12, fontWeight: .medium),
         bold: MarkdownStyle = .init(fontWeight: .bold),
         italic: MarkdownStyle = .init(isItalic: true),
+        strikethrough: MarkdownStyle = .init(),
         code: MarkdownStyle = .init(),
         codeBlock: MarkdownStyle = .init(),
         link: MarkdownStyle = .init(),
-        listPrefix: MarkdownStyle = .init(fontWeight: .semibold)
+        listPrefix: MarkdownStyle = .init(fontWeight: .semibold),
+        blockquote: MarkdownStyle = .init()
     )
 }
 ```
@@ -168,6 +172,7 @@ public enum MarkdownElementType: Equatable {
     case header(level: Int)
     case bold
     case italic
+    case strikethrough
     case code
     case codeBlock
     case link(title: String, url: String)
@@ -176,6 +181,7 @@ public enum MarkdownElementType: Equatable {
     case orderedList(number: Int, content: [MarkdownElement])
     case lineBreak
     case paragraph
+    case blockquote(content: [MarkdownElement])
     case table(headers: [String], rows: [[String]])
 }
 ```
@@ -186,6 +192,7 @@ public enum MarkdownElementType: Equatable {
 - `header(level:)` - Header with level (1-6)
 - `bold` - Bold text
 - `italic` - Italic text
+- `strikethrough` - Strikethrough text
 - `code` - Inline code
 - `codeBlock` - Code block
 - `link(title:url:)` - Link with title and URL
@@ -194,6 +201,7 @@ public enum MarkdownElementType: Equatable {
 - `orderedList(number:content:)` - Ordered list with number and content
 - `lineBreak` - Line break
 - `paragraph` - Paragraph
+- `blockquote(content:)` - Blockquote with content
 - `table(headers:rows:)` - Table with headers and rows
 
 ## Extensions

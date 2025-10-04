@@ -304,7 +304,80 @@ final class MarkdownToAttributedStringTests: XCTestCase {
             }
         }
     }
-    
+
+    // MARK: - Strikethrough Tests
+
+    func testStrikethrough() {
+        let markdown = "This is ~~strikethrough~~ text."
+        let attributedString = markdown.toAttributedString()
+
+        XCTAssertTrue(attributedString.string.contains("strikethrough"))
+        XCTAssertFalse(attributedString.string.contains("~~"))
+
+        // Проверяем наличие атрибута strikethrough
+        let fullRange = NSRange(location: 0, length: attributedString.length)
+        var hasStrikethrough = false
+        attributedString.enumerateAttribute(NSAttributedString.Key.strikethroughStyle, in: fullRange, options: []) { value, range, stop in
+            if value != nil {
+                hasStrikethrough = true
+                stop.pointee = true
+            }
+        }
+        XCTAssertTrue(hasStrikethrough, "Strikethrough attribute should be present")
+    }
+
+    func testStrikethroughInline() {
+        let markdown = "Some ~~strikethrough text~~ in the middle."
+        let attributedString = markdown.toAttributedString()
+
+        XCTAssertTrue(attributedString.string.contains("strikethrough text"))
+        XCTAssertFalse(attributedString.string.contains("~~"))
+    }
+
+    // MARK: - Blockquote Tests
+
+    func testBlockquote() {
+        let markdown = "> This is a blockquote\n> with multiple lines"
+        let attributedString = markdown.toAttributedString()
+
+        XCTAssertTrue(attributedString.string.contains("This is a blockquote"))
+        XCTAssertTrue(attributedString.string.contains("with multiple lines"))
+        XCTAssertTrue(attributedString.string.contains("▎"), "Blockquote should contain indicator")
+    }
+
+    func testBlockquoteWithContent() {
+        let markdown = "> **Bold** and *italic* in blockquote"
+        let attributedString = markdown.toAttributedString()
+
+        XCTAssertTrue(attributedString.string.contains("Bold"))
+        XCTAssertTrue(attributedString.string.contains("italic"))
+        XCTAssertTrue(attributedString.string.contains("▎"))
+    }
+
+    // MARK: - Complex Tests with New Features
+
+    func testStrikethroughAndBlockquote() {
+        let markdown = """
+        # Test Document
+
+        Normal text with ~~strikethrough~~ content.
+
+        > This is a blockquote
+        > with ~~strikethrough text~~ inside
+
+        More normal text.
+        """
+
+        let attributedString = markdown.toAttributedString()
+        let text = attributedString.string
+
+        XCTAssertTrue(text.contains("Test Document"))
+        XCTAssertTrue(text.contains("strikethrough"))
+        XCTAssertTrue(text.contains("blockquote"))
+        XCTAssertTrue(text.contains("▎"))
+        XCTAssertFalse(text.contains("~~"))
+    }
+
     // MARK: - Platform-Specific Tests
     
     #if canImport(UIKit)

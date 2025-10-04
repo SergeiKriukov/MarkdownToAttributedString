@@ -19,6 +19,12 @@ public class MarkdownParser {
                 continue
             }
 
+            // Парсим blockquotes (> quote)
+            if let blockquoteElement = parseBlockquote(line) {
+                elements.append(blockquoteElement)
+                continue
+            }
+
             // Парсим заголовки (# Header)
             if let headerElement = parseHeader(trimmedLine) {
                 elements.append(headerElement)
@@ -104,6 +110,14 @@ public class MarkdownParser {
         return MarkdownElement(type: .codeBlock, content: content)
     }
 
+    private func parseBlockquote(_ line: String) -> MarkdownElement? {
+        guard line.hasPrefix(">") else { return nil }
+
+        let content = String(line.dropFirst(1).trimmingCharacters(in: .whitespaces))
+        let inlineElements = parseInlineElements(content)
+        return MarkdownElement(type: .blockquote(content: inlineElements), content: "")
+    }
+
     private func parseInlineElements(_ line: String) -> [MarkdownElement] {
         var elements: [MarkdownElement] = []
         var currentText = ""
@@ -171,6 +185,20 @@ public class MarkdownParser {
                     }
                     elements.append(styleElement.element)
                     i = styleElement.endIndex
+                } else {
+                    currentText.append(chars[i])
+                    i += 1
+                }
+
+            case "~":
+                // Strikethrough (~~text~~)
+                if let strikethroughElement = parseStrikethrough(chars, startIndex: i) {
+                    if !currentText.isEmpty {
+                        elements.append(MarkdownElement(type: .text, content: currentText))
+                        currentText = ""
+                    }
+                    elements.append(strikethroughElement.element)
+                    i = strikethroughElement.endIndex
                 } else {
                     currentText.append(chars[i])
                     i += 1
@@ -252,6 +280,24 @@ public class MarkdownParser {
         return (element, endIndex + markerLength)
     }
 
+    private func parseStrikethrough(_ chars: [Character], startIndex: Int) -> (element: MarkdownElement, endIndex: Int)? {
+        // Проверяем, что есть два тильды подряд
+        guard startIndex + 1 < chars.count && chars[startIndex + 1] == "~" else {
+            return nil
+        }
+
+        let markerLength = 2
+
+        // Ищем закрывающие тильды
+        guard let endIndex = findStrikethroughEnd(chars, start: startIndex + markerLength) else {
+            return nil
+        }
+
+        let content = String(chars[(startIndex + markerLength)..<endIndex])
+        let element = MarkdownElement(type: .strikethrough, content: content)
+        return (element, endIndex + markerLength)
+    }
+
     private func findClosingBracket(_ chars: [Character], start: Int) -> Int? {
         for i in start..<chars.count {
             if chars[i] == "]" {
@@ -285,6 +331,15 @@ public class MarkdownParser {
                 if isMatch {
                     return i
                 }
+            }
+        }
+        return nil
+    }
+
+    private func findStrikethroughEnd(_ chars: [Character], start: Int) -> Int? {
+        for i in start..<chars.count {
+            if i + 1 < chars.count && chars[i] == "~" && chars[i + 1] == "~" {
+                return i
             }
         }
         return nil

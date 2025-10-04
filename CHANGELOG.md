@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-10-04
+
+### Added
+- **Strikethrough support** - Added `~~strikethrough text~~` formatting
+- **Blockquotes support** - Added `> quote text` blockquotes with nested formatting
+- **Enhanced inline element parsing** - Blockquotes now support nested bold, italic, and strikethrough formatting
+
+### Changed
+- **Updated MarkdownElementType** - Added `strikethrough` and `blockquote(content:)` cases
+- **Enhanced MarkdownConfiguration** - Added `strikethrough` and `blockquote` style configurations
+- **Improved parser architecture** - Better handling of nested inline elements in blockquotes
+
+### Features
+- **Complete Markdown support** now includes strikethrough and blockquotes
+- **Nested formatting** in blockquotes (bold, italic, strikethrough, code, links)
+- **Cross-platform strikethrough styling** - Works on iOS, macOS, tvOS, watchOS
+
 ## [1.0.0] - 2024-09-25
 
 ### Added
