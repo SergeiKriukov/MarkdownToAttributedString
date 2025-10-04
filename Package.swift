@@ -18,9 +18,6 @@ let package = Package(
         .executable(
             name: "MarkdownExample",
             targets: ["MarkdownExample"]),
-        .executable(
-            name: "TestNewFeatures",
-            targets: ["TestNewFeatures"]),
     ],
     targets: [
         .target(
