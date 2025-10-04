@@ -454,6 +454,35 @@ let customTheme = MarkdownTheme(
 
 ---
 
+## 🔗 **Similar Projects**
+
+If you're looking for alternative Swift Markdown libraries, check out these excellent projects:
+
+### [SwiftyMarkdown](https://github.com/SimonFairbairn/SwiftyMarkdown) ⭐ 1.7k
+- **Author**: Simon Fairbairn
+- **Focus**: Comprehensive Markdown parsing with advanced customization
+- **Key Features**:
+  - Rules-based processing engine
+  - Front Matter / YAML support
+  - Dynamic Type support
+  - SpriteKit integration
+  - Extensive styling options
+- **Platforms**: iOS, macOS, tvOS, watchOS
+
+### [MarkdownKit](https://github.com/bmoliveira/MarkdownKit) ⭐ 871
+- **Author**: Bruno Oliveira
+- **Focus**: Lightweight and extensible Markdown parser
+- **Key Features**:
+  - Regular expression-based parsing
+  - Custom element support
+  - CocoaPods, Carthage, and SPM support
+  - Extensible architecture
+- **Platforms**: iOS, macOS
+
+> **Note**: MarkdownToAttributedString was inspired by studying these projects and aims to provide a modern, Swift-first approach with comprehensive cross-platform support and detailed customization options.
+
+---
+
 ## 🙏 Acknowledgments
 
 - Inspired by the need for easy Markdown to NSAttributedString conversion
