@@ -189,26 +189,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Future Releases
 
-### Planned Features
-- [ ] Advanced table support with styling
-- [ ] Syntax highlighting for code blocks
-- [ ] Custom font support
-- [ ] Advanced export formats (PDF, HTML)
-- [ ] Real-time preview
-- [ ] Plugin system for custom elements
-- [ ] Performance optimizations
-- [ ] Additional platform support
+### Version 2.1.0 - Typography & Accessibility (Q2 2025)
+- [ ] Dynamic Type support for automatic font scaling
+- [ ] Custom bullets and markers for lists
+- [ ] Text alignment options for headers and blockquotes
+- [ ] Improved accessibility features
 
-### Known Issues
+### Version 2.2.0 - Advanced Markdown (Q3 2025)
+- [ ] Front Matter / YAML metadata support
+- [ ] Referenced links and images syntax
+- [ ] Line spacing and paragraph spacing control
+- [ ] Enhanced link styling (underline, color)
+
+### Version 2.3.0 - Rich Content (Q4 2025)
+- [ ] Bundle images support (`![alt](<AssetName>)`)
+- [ ] Tables support with styling
+- [ ] Inline image sizing and positioning
+- [ ] Image placeholder customization
+
+### Version 3.0.0 - Advanced Customization (Q1 2026)
+- [ ] Rules-based engine for custom Markdown elements
+- [ ] Font style enum (.normal, .bold, .italic, .monospaced, etc.)
+- [ ] Dark mode and theme support
+- [ ] Plugin system for extensibility
+
+### Long-term Vision
+- [ ] Syntax highlighting for code blocks
+- [ ] Advanced export formats (PDF, HTML, RTF with images)
+- [ ] Real-time preview component
+- [ ] Cross-platform HTML rendering
+- [ ] Performance optimizations for large documents
+- [ ] LaTeX/MathJax support
+
+### Known Issues & Limitations
 - [ ] Complex nested lists may not render perfectly
-- [ ] Some edge cases in table parsing
+- [ ] Some edge cases in table parsing (future feature)
 - [ ] Performance could be improved for very large documents
-- [ ] Limited customization options for some elements
+- [ ] Limited customization options for some elements (being addressed)
 
 ### Breaking Changes
-- None planned for the near future
-- All changes will be backward compatible
-- Major version bumps will be clearly documented
+- None planned for versions 2.x (backward compatible)
+- Version 3.0.0 may introduce breaking changes for advanced features
+- All breaking changes will be clearly documented with migration guides
 
 ---
 

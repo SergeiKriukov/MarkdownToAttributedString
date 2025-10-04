@@ -234,6 +234,226 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🗺️ **Roadmap & Future Features**
+
+### 🚀 **Version 2.1.0 - Typography & Accessibility (Q2 2025)**
+
+#### ✨ Dynamic Type Support
+Автоматическая адаптация размера шрифта под системные настройки пользователя.
+
+```swift
+// Будущий API
+let config = MarkdownConfiguration.dynamicType(
+    h1: .init(fontWeight: .bold),
+    body: .init(fontSize: .body) // .largeTitle, .title1, .body, .caption etc.
+)
+
+let attributedString = markdown.toAttributedString(
+    configuration: config,
+    traitCollection: UITraitCollection(preferredContentSizeCategory: .extraLarge)
+)
+```
+
+**Реализация:**
+- Расширение `MarkdownStyle` с `FontSize` enum
+- Добавление метода `dynamicType()` в `MarkdownConfiguration`
+- Интеграция с `UITraitCollection` для автоматической адаптации
+
+#### 🎯 Custom Bullets for Lists
+Возможность использовать кастомные маркеры вместо стандартных.
+
+```swift
+let config = MarkdownConfiguration(
+    listPrefix: .init(
+        unorderedSymbols: ["🍎", "🍌", "🍇"], // Для разных уровней вложенности
+        orderedStyle: .circledNumbers // .numbers, .letters, .roman, .circledNumbers
+    )
+)
+
+// Markdown: - Item 1\n  - Item 2\n    - Item 3
+// Результат: 🍎 Item 1\n  🍌 Item 2\n    🍇 Item 3
+```
+
+**Реализация:**
+- Добавление `unorderedSymbols` и `orderedStyle` в `MarkdownConfiguration`
+- Расширение `MarkdownElementType.unorderedList` с уровнем вложенности
+- Логика выбора символа по уровню в `AttributedStringConverter`
+
+### 🔮 **Version 2.2.0 - Advanced Markdown (Q3 2025)**
+
+#### 📝 Front Matter / YAML Support
+Поддержка метаданных в начале Markdown файлов.
+
+```yaml
+---
+title: "My Document"
+author: "John Doe"
+date: "2025-10-04"
+tags: ["markdown", "swift"]
+---
+
+# Document Content
+This is the actual content...
+```
+
+```swift
+if let frontMatter = markdown.frontMatter {
+    print("Title: \(frontMatter["title"] ?? "")")
+    print("Author: \(frontMatter["author"] ?? "")")
+}
+
+// Или получение чистого контента без метаданных
+let cleanContent = markdown.contentWithoutFrontMatter
+```
+
+**Реализация:**
+- Класс `FrontMatterParser` для парсинга YAML
+- Расширение `String` с методами `frontMatter` и `contentWithoutFrontMatter`
+- Поддержка различных форматов разделителей (---, +++)
+
+#### 🔗 Referenced Links & Images
+Расширенный синтаксис для ссылок и изображений.
+
+```markdown
+This is a [referenced link][1] and ![referenced image][2].
+
+[1]: https://example.com "Optional title"
+[2]: /path/to/image.png "Alt text"
+```
+
+**Реализация:**
+- Парсинг ссылок в конце документа
+- Создание словаря соответствий
+- Замена referenced синтаксиса на стандартный
+
+#### 📏 Line & Paragraph Spacing
+Точный контроль типографики.
+
+```swift
+let config = MarkdownConfiguration(
+    h1: .init(lineSpacing: 8, paragraphSpacing: 16),
+    body: .init(lineSpacing: 4, paragraphSpacing: 8),
+    blockquote: .init(lineSpacing: 2, paragraphSpacing: 12)
+)
+```
+
+**Реализация:**
+- Добавление `lineSpacing` и `paragraphSpacing` в `MarkdownStyle`
+- Применение `NSMutableParagraphStyle` в `AttributedStringConverter`
+
+### 🌟 **Version 2.3.0 - Rich Content (Q4 2025)**
+
+#### 🖼️ Bundle Images Support
+Поддержка изображений из app bundle.
+
+```markdown
+![App Icon](<AppIcon>)
+![Custom Asset](<my-custom-image>)
+```
+
+```swift
+let config = MarkdownConfiguration(
+    image: .init(
+        bundle: Bundle.main,
+        placeholder: "🖼️" // Для изображений, которые не найдены
+    )
+)
+```
+
+**Реализация:**
+- Расширение `MarkdownElementType.image` с bundle поддержкой
+- Использование `NSTextAttachment` для встраивания изображений
+- Fallback на placeholder для отсутствующих изображений
+
+#### 📊 Tables Support
+Базовая поддержка таблиц Markdown.
+
+```markdown
+| Header 1 | Header 2 | Header 3 |
+|----------|----------|----------|
+| Cell 1   | Cell 2   | Cell 3   |
+| Cell 4   | Cell 5   | Cell 6   |
+```
+
+```swift
+let config = MarkdownConfiguration(
+    table: .init(
+        headerStyle: .bold,
+        borderColor: .gray,
+        cellPadding: 8
+    )
+)
+```
+
+**Реализация:**
+- Парсер для table синтаксиса
+- Создание `NSTextTable` для табличного представления
+- Кастомизация стилей заголовков и ячеек
+
+### 🎨 **Version 3.0.0 - Advanced Customization (Q1 2026)**
+
+#### 🎭 Rules-Based Engine
+Расширяемая система правил для кастомных элементов.
+
+```swift
+// Создание кастомного правила
+let mentionRule = CharacterRule(
+    pattern: "@(\\w+)",
+    style: .foregroundColor(.blue)
+)
+
+// Добавление в конфигурацию
+let config = MarkdownConfiguration(
+    customRules: [mentionRule]
+)
+
+// Markdown: Hello @username!
+// Результат: Hello @username! (с синим цветом)
+```
+
+**Реализация:**
+- Протокол `MarkdownRule` для кастомных правил
+- Интеграция в основной парсер
+- Поддержка регулярных выражений и стилей
+
+#### 🎨 Font Style Enum
+Более точный контроль стилей шрифтов.
+
+```swift
+let config = MarkdownConfiguration(
+    h1: .init(fontStyle: .boldItalic, fontSize: 24),
+    code: .init(fontStyle: .monospaced),
+    link: .init(fontStyle: .underlined)
+)
+```
+
+**Реализация:**
+- Enum `FontStyle` (.normal, .bold, .italic, .boldItalic, .monospaced, .underlined)
+- Расширение `MarkdownStyle` с `fontStyle` свойством
+- Применение через `UIFontDescriptor` и `NSFontDescriptor`
+
+#### 🌙 Dark Mode & Theme Support
+Полная поддержка тем и цветовых схем.
+
+```swift
+let lightConfig = MarkdownConfiguration.lightTheme()
+let darkConfig = MarkdownConfiguration.darkTheme()
+
+// Или кастомная тема
+let customTheme = MarkdownTheme(
+    background: .systemBackground,
+    text: .label,
+    accent: .systemBlue
+)
+```
+
+**Реализация:**
+- Класс `MarkdownTheme` для цветовых схем
+- Методы `lightTheme()` и `darkTheme()` в `MarkdownConfiguration`
+- Интеграция с `UITraitCollection` и `NSAppearance`
+
+---
+
 ## 🙏 Acknowledgments
 
 - Inspired by the need for easy Markdown to NSAttributedString conversion
