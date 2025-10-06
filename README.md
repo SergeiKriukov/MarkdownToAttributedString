@@ -479,6 +479,8 @@ If you're looking for alternative Swift Markdown libraries, check out these exce
   - Extensible architecture
 - **Platforms**: iOS, macOS
 
+### https://github.com/apparata/Markin
+
 > **Note**: MarkdownToAttributedString was inspired by studying these projects and aims to provide a modern, Swift-first approach with comprehensive cross-platform support and detailed customization options.
 
 ---
